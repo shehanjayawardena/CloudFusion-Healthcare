@@ -170,13 +170,22 @@ def generate_word_report():
                 rc = cap.add_run("Figure 1: Continuous AWS IoT Telemetry vs Traditional Discrete Polling (Clinical Evidence)")
                 rc.font.size = Pt(9)
                 rc.font.italic = True
+
+            elif "Task 3" in h_text and os.path.exists('docs/report/figures/aws_architecture_diagram.jpg'):
+                doc.add_paragraph()
+                doc.add_picture('docs/report/figures/aws_architecture_diagram.jpg', width=Inches(6.2))
+                cap = doc.add_paragraph()
+                cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                rc = cap.add_run("Figure 2: Comprehensive Target AWS Cloud Architecture Diagram for CloudFusion Healthcare Analytics Ltd")
+                rc.font.size = Pt(9)
+                rc.font.italic = True
                 
             elif "Task 5" in h_text and os.path.exists('docs/report/figures/cost_comparison_tco.png'):
                 doc.add_paragraph()
                 doc.add_picture('docs/report/figures/cost_comparison_tco.png', width=Inches(6.0))
                 cap = doc.add_paragraph()
                 cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                rc = cap.add_run("Figure 2: Total Cost of Ownership (TCO) Comparison: On-Premises Baseline vs Cloud FinOps")
+                rc = cap.add_run("Figure 3: Total Cost of Ownership (TCO) Comparison: On-Premises Baseline vs Cloud FinOps")
                 rc.font.size = Pt(9)
                 rc.font.italic = True
                 
@@ -185,10 +194,11 @@ def generate_word_report():
                     doc.add_picture('docs/report/figures/aws_monthly_cost_breakdown.png', width=Inches(5.5))
                     cap2 = doc.add_paragraph()
                     cap2.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                    rc2 = cap2.add_run("Figure 3: Target AWS Architecture Monthly Cost Distribution ($25,176 / month)")
+                    rc2 = cap2.add_run("Figure 4: Target AWS Architecture Monthly Cost Distribution ($25,176 / month)")
                     rc2.font.size = Pt(9)
                     rc2.font.italic = True
             continue
+
             
         if line.startswith("### "):
             h_text = line.replace("### ", "").strip()
@@ -430,47 +440,52 @@ def generate_pptx_deck():
         p_sub.font.size = PPt(13)
         p_sub.font.color.rgb = PRGBColor(148, 163, 184) # Muted slate
         
-        # 3 Content Cards
-        col_width = PInches(3.55)
-        col_gap = PInches(0.35)
-        top_pos = PInches(2.5)
-        card_height = PInches(4.2)
-        
-        for idx, (card_title, card_desc) in enumerate(slide_data['cards']):
-            left_pos = PInches(1.0) + idx * (col_width + col_gap)
+        # If Slide 07, embed the full-width AWS Architecture Diagram photo!
+        if slide_data['num'] == '07' and os.path.exists('docs/report/figures/aws_architecture_diagram.jpg'):
+            slide.shapes.add_picture('docs/report/figures/aws_architecture_diagram.jpg', PInches(1.0), PInches(2.2), width=PInches(11.333))
+        else:
+            # 3 Content Cards
+            col_width = PInches(3.55)
+            col_gap = PInches(0.35)
+            top_pos = PInches(2.5)
+            card_height = PInches(4.2)
             
-            # Card background shape
-            shape = slide.shapes.add_shape(
-                pptx.enum.shapes.MSO_SHAPE.ROUNDED_RECTANGLE,
-                left_pos, top_pos, col_width, card_height
-            )
-            shape.fill.solid()
-            shape.fill.fore_color.rgb = PRGBColor(22, 30, 49) # Card slate
-            shape.line.color.rgb = PRGBColor(56, 189, 248) if idx == 0 else PRGBColor(51, 65, 85)
-            shape.line.width = PPt(1.2) if idx == 0 else PPt(0.8)
-            
-            # Card text
-            tb_card = slide.shapes.add_textbox(left_pos + PInches(0.25), top_pos + PInches(0.3), col_width - PInches(0.5), card_height - PInches(0.6))
-            tf = tb_card.text_frame
-            tf.word_wrap = True
-            
-            p_ct = tf.paragraphs[0]
-            p_ct.text = card_title
-            p_ct.font.name = 'Calibri'
-            p_ct.font.size = PPt(16)
-            p_ct.font.bold = True
-            p_ct.font.color.rgb = PRGBColor(6, 182, 212) if idx == 0 else PRGBColor(241, 245, 249)
-            p_ct.space_after = PPt(12)
-            
-            p_cd = tf.add_paragraph()
-            p_cd.text = card_desc
-            p_cd.font.name = 'Calibri'
-            p_cd.font.size = PPt(12)
-            p_cd.font.color.rgb = PRGBColor(203, 213, 225)
-            p_cd.line_spacing = 1.3
+            for idx, (card_title, card_desc) in enumerate(slide_data['cards']):
+                left_pos = PInches(1.0) + idx * (col_width + col_gap)
+                
+                # Card background shape
+                shape = slide.shapes.add_shape(
+                    pptx.enum.shapes.MSO_SHAPE.ROUNDED_RECTANGLE,
+                    left_pos, top_pos, col_width, card_height
+                )
+                shape.fill.solid()
+                shape.fill.fore_color.rgb = PRGBColor(22, 30, 49) # Card slate
+                shape.line.color.rgb = PRGBColor(56, 189, 248) if idx == 0 else PRGBColor(51, 65, 85)
+                shape.line.width = PPt(1.2) if idx == 0 else PPt(0.8)
+                
+                # Card text
+                tb_card = slide.shapes.add_textbox(left_pos + PInches(0.25), top_pos + PInches(0.3), col_width - PInches(0.5), card_height - PInches(0.6))
+                tf = tb_card.text_frame
+                tf.word_wrap = True
+                
+                p_ct = tf.paragraphs[0]
+                p_ct.text = card_title
+                p_ct.font.name = 'Calibri'
+                p_ct.font.size = PPt(16)
+                p_ct.font.bold = True
+                p_ct.font.color.rgb = PRGBColor(6, 182, 212) if idx == 0 else PRGBColor(241, 245, 249)
+                p_ct.space_after = PPt(12)
+                
+                p_cd = tf.add_paragraph()
+                p_cd.text = card_desc
+                p_cd.font.name = 'Calibri'
+                p_cd.font.size = PPt(12)
+                p_cd.font.color.rgb = PRGBColor(203, 213, 225)
+                p_cd.line_spacing = 1.3
             
     prs.save(r'docs\presentation\executive_presentation.pptx')
     print(r'[OK] Generated docs\presentation\executive_presentation.pptx')
+
 
 if __name__ == '__main__':
     generate_word_report()

@@ -424,20 +424,10 @@
     <section class="slide" data-slide="7">
       <div class="slide-number">Slide 07 // Network Topology</div>
       <h1 class="slide-title">Target AWS Multi-AZ Network Topology (VPC: 10.50.0.0/16)</h1>
-      <div class="grid-3">
-        <div class="card">
-          <h3>Public Tier (ALB / NAT)</h3>
-          <p>Subnets <code>10.50.1.0/24, .2.0, .3.0</code> spanning 3 AZs. Terminates HTTPS and hosts 3 redundant NAT Gateways.</p>
-        </div>
-        <div class="card">
-          <h3>Private App Tier (ECS)</h3>
-          <p>Subnets <code>10.50.10.0/24, .20.0, .30.0</code>. Hosts auto-scaling ECS Fargate tasks and Lambda functions. Zero public IPs.</p>
-        </div>
-        <div class="card">
-          <h3>Isolated DB Tier (Aurora)</h3>
-          <p>Subnets <code>10.50.100.0/24, .110.0, .120.0</code>. Completely isolated with no internet egress. Accepts port 5432 strictly from App SG.</p>
-        </div>
+      <div style="text-align: center; margin-top: 1rem;">
+        <img src="../report/figures/aws_architecture_diagram.jpg" alt="Target AWS Multi-AZ Cloud Architecture Diagram" style="width: 100%; max-height: 440px; object-fit: contain; border-radius: 0.75rem; border: 1px solid rgba(56, 189, 248, 0.3); box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
       </div>
+
       <div class="notes-box">
         <strong>Speaker Notes:</strong> Our Multi-AZ VPC spans three availability zones in Singapore. VPC Gateway endpoints for S3 and DynamoDB keep internal data lake traffic on private AWS fiber, avoiding expensive NAT data fees.
       </div>
