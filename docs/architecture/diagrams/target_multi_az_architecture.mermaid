@@ -1,0 +1,81 @@
+graph TD
+    subgraph Internet_Clients ["External Clients & Network Edge"]
+        Patients["Patient & Clinician Devices"]
+        Wearables["Wearable IoT Medical Devices"]
+        R53["Amazon Route 53 (DNS & Health Checks)"]
+        CF["Amazon CloudFront CDN (TLS 1.3 Edge)"]
+        WAF["AWS WAF (Web Application Firewall)"]
+    end
+
+    subgraph AWS_Cloud ["AWS Cloud (Region: ap-southeast-1 - Singapore)"]
+        subgraph Shield_Perimeter ["Perimeter & Edge Protection"]
+            CF --- WAF
+            S3_UI["Amazon S3: TPP Web SPA (OAC Secured)"]
+            CF -->|Static Assets| S3_UI
+            CF -->|Dynamic API / Video| ALB["Public Application Load Balancer"]
+        end
+
+        subgraph VPC ["AWS Virtual Private Cloud: 10.50.0.0/16"]
+            IGW["Internet Gateway"]
+            IGW --- ALB
+
+            subgraph AZ_A ["Availability Zone A (ap-southeast-1a)"]
+                Pub_Sub_A["Public Subnet A: 10.50.1.0/24<br/>• NAT Gateway A<br/>• ALB Endpoint A"]
+                App_Sub_A["Private App Subnet A: 10.50.10.0/24<br/>• ECS Fargate: PMP Ingestion Task<br/>• ECS Fargate: TPP API Task<br/>• AWS Lambda Triggers"]
+                DB_Sub_A["Private DB Subnet A: 10.50.100.0/24<br/>• Aurora PG Serverless Writer<br/>• ElastiCache Redis Primary"]
+            end
+
+            subgraph AZ_B ["Availability Zone B (ap-southeast-1b)"]
+                Pub_Sub_B["Public Subnet B: 10.50.2.0/24<br/>• NAT Gateway B<br/>• ALB Endpoint B"]
+                App_Sub_B["Private App Subnet B: 10.50.20.0/24<br/>• ECS Fargate: PMP Ingestion Task<br/>• ECS Fargate: TPP API Task<br/>• AWS Lambda Triggers"]
+                DB_Sub_B["Private DB Subnet B: 10.50.110.0/24<br/>• Aurora PG Serverless Reader<br/>• ElastiCache Redis Replica"]
+            end
+
+            subgraph AZ_C ["Availability Zone C (ap-southeast-1c)"]
+                Pub_Sub_C["Public Subnet C: 10.50.3.0/24<br/>• NAT Gateway C<br/>• ALB Endpoint C"]
+                App_Sub_C["Private App Subnet C: 10.50.30.0/24<br/>• ECS Fargate: PMP Ingestion Task<br/>• ECS Fargate: TPP API Task"]
+                DB_Sub_C["Private DB Subnet C: 10.50.120.0/24<br/>• Aurora Storage Replication<br/>• Witness / Standby Node"]
+            end
+
+            subgraph VPC_Endpoints ["VPC Endpoints (PrivateLink)"]
+                VPCE_S3["S3 Gateway Endpoint"]
+                VPCE_DDB["DynamoDB Gateway Endpoint"]
+                VPCE_KMS["KMS / Secrets Mgr Interface VPCE"]
+            end
+        end
+
+        subgraph Managed_Cloud_Services ["AWS Serverless & Managed Persistence Tier"]
+            IoTCore["AWS IoT Core (mTLS Authentication)"]
+            Kinesis["Amazon Kinesis Data Streams"]
+            DDB_IoT["Amazon DynamoDB (Patient Sessions & Telemetry)"]
+            S3_Lake["Amazon S3: Medical Data Lake (SSE-KMS)"]
+            KMS["AWS KMS (Customer Managed Healthcare Keys)"]
+        end
+
+        subgraph Monitoring_Governance ["Observability & Governance"]
+            CW["Amazon CloudWatch & Container Insights"]
+            XRay["AWS X-Ray Distributed Tracing"]
+            SecHub["AWS Security Hub & GuardDuty"]
+            CloudTrail["AWS CloudTrail (WORM Object Lock)"]
+        end
+    end
+
+    %% Ingestion Connections
+    Patients -->|HTTPS / WSS| R53
+    R53 --> CF
+    Wearables -->|MQTT / mTLS| IoTCore
+    IoTCore --> Kinesis
+    Kinesis --> App_Sub_A & App_Sub_B
+
+    %% Load Balancer Routing
+    ALB --> App_Sub_A & App_Sub_B & App_Sub_C
+
+    %% App to DB Connections
+    App_Sub_A & App_Sub_B & App_Sub_C --> DB_Sub_A & DB_Sub_B
+    App_Sub_A & App_Sub_B & App_Sub_C --> DDB_IoT
+    App_Sub_A & App_Sub_B & App_Sub_C --> S3_Lake
+
+    %% Endpoints & Security
+    App_Sub_A & App_Sub_B --> VPCE_S3 & VPCE_DDB & VPCE_KMS
+    KMS -.->|Encrypts| DB_Sub_A & DDB_IoT & S3_Lake
+    App_Sub_A & App_Sub_B & App_Sub_C -.->|Metrics & Traces| CW & XRay

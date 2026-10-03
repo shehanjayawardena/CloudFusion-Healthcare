@@ -1,0 +1,37 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowPullFromECR",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowCloudWatchLogging",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:ap-southeast-1:*:log-group:/ecs/cha-healthcare-prod*:*"
+    },
+    {
+      "Sid": "AllowFetchSecretsAndKMSDecrypt",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:GetSecretValue",
+        "kms:Decrypt"
+      ],
+      "Resource": [
+        "arn:aws:secretsmanager:ap-southeast-1:*:secret:cha-healthcare-prod-*",
+        "arn:aws:kms:ap-southeast-1:*:key/*"
+      ]
+    }
+  ]
+}

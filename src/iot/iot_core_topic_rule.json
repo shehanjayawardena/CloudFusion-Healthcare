@@ -1,0 +1,31 @@
+{
+  "topicRulePayload": {
+    "sql": "SELECT patient_id, heart_rate, spo2, blood_pressure, temperature_celsius, anomaly_flag, timestamp() as ingestion_time FROM 'healthcare/patients/+/vitals'",
+    "description": "Routes urgent vitals to clinical triage SNS and continuous telemetry to Kinesis Data Streams",
+    "actions": [
+      {
+        "kinesis": {
+          "roleArn": "arn:aws:iam::123456789012:role/cha-healthcare-iot-kinesis-role",
+          "streamName": "cha-healthcare-prod-telemetry-stream",
+          "partitionKey": "${patient_id}"
+        }
+      },
+      {
+        "sns": {
+          "roleArn": "arn:aws:iam::123456789012:role/cha-healthcare-iot-sns-role",
+          "targetArn": "arn:aws:sns:ap-southeast-1:123456789012:cha-healthcare-urgent-vitals-topic",
+          "messageFormat": "JSON"
+        }
+      }
+    ],
+    "errorAction": {
+      "republish": {
+        "roleArn": "arn:aws:iam::123456789012:role/cha-healthcare-iot-republish-role",
+        "topic": "healthcare/errors/vitals",
+        "qos": 1
+      }
+    },
+    "ruleDisabled": false,
+    "awsIotSqlVersion": "2016-03-23"
+  }
+}

@@ -1,0 +1,66 @@
+graph TD
+    subgraph Users ["Client Devices & Telehealth Users"]
+        Patient["Patient Mobile App & Web Browser"]
+        Doctor["Doctor Clinical Workstation"]
+    end
+
+    subgraph CDN_Perimeter ["Global Edge Network & Perimeter Security"]
+        R53["Amazon Route 53 (DNS / Health Checks)"]
+        WAF["AWS WAF (SQLi, XSS, Rate Limiting)"]
+        CF["Amazon CloudFront CDN (TLS 1.3 Edge)"]
+        S3_Static["Amazon S3: Static Frontend SPA<br/>(React / Next.js Export)<br/>Protected via Origin Access Control (OAC)"]
+    end
+
+    subgraph Load_Balancing ["Application Traffic Management"]
+        ALB["Application Load Balancer (Multi-AZ)<br/>Path-based & Host-based Routing<br/>KMS ACM SSL Certificate"]
+    end
+
+    subgraph Microservices_Tier ["ECS Fargate Microservices Tier (Multi-AZ)"]
+        Auth_Svc["Auth & Identity Service<br/>(Cognito / JWT Validation)"]
+        EHR_Svc["EHR & Patient Records Service<br/>(FHIR / HL7 Standards)"]
+        Appt_Svc["Appointment Booking Service<br/>(Real-Time Scheduling)"]
+        Telehealth_Svc["Telehealth Session Manager<br/>(WebRTC Signaling & Token Generation)"]
+        Prescript_Svc["e-Prescription & Reporting Service<br/>(Digital Signatures)"]
+    end
+
+    subgraph RealTime_Media ["Real-Time Video Consultation"]
+        Chime["Amazon Chime SDK Media Pipelines<br/>(Encrypted WebRTC P2P Video/Audio)"]
+    end
+
+    subgraph Data_Storage ["Secure Healthcare Persistence Tier"]
+        Aurora["Amazon Aurora PostgreSQL Multi-AZ<br/>(Patient Records, Doctors, Bookings)"]
+        Redis["Amazon ElastiCache Redis Cluster<br/>(Active Tokens & Session Cache)"]
+        DDB_Chat["Amazon DynamoDB<br/>(Encrypted Consultation Chat & Audits)"]
+        S3_Medical["Amazon S3 Medical Reports Bucket<br/>(Lab Results, X-Rays, DICOM - SSE-KMS)"]
+        KMS["AWS KMS (Healthcare Customer Managed Key)"]
+    end
+
+    %% User Connections
+    Patient & Doctor --> R53
+    R53 --> CF
+    CF --- WAF
+    CF -->|Static Assets /*| S3_Static
+    CF -->|API Traffic /api/*| ALB
+
+    %% ALB Routing
+    ALB -->|/api/auth| Auth_Svc
+    ALB -->|/api/ehr| EHR_Svc
+    ALB -->|/api/appointments| Appt_Svc
+    ALB -->|/api/telehealth| Telehealth_Svc
+    ALB -->|/api/prescriptions| Prescript_Svc
+
+    %% Media connection
+    Telehealth_Svc <-->|Create Meeting / Session| Chime
+    Patient & Doctor <-->|Encrypted Video Stream| Chime
+
+    %% Microservices to Storage
+    Auth_Svc --> Redis
+    EHR_Svc --> Aurora
+    Appt_Svc --> Aurora
+    Appt_Svc --> Redis
+    Telehealth_Svc --> DDB_Chat
+    Prescript_Svc --> Aurora
+    Prescript_Svc --> S3_Medical
+
+    %% Security
+    KMS -.->|Envelope Encryption| Aurora & Redis & DDB_Chat & S3_Medical

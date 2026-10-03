@@ -1,0 +1,37 @@
+{
+  "RecipeFormatVersion": "2020-05-31",
+  "ComponentName": "com.cloudfusion.edge.telemetry",
+  "ComponentVersion": "1.0.0",
+  "ComponentDescription": "CloudFusion Edge Telemetry Processor: Filters wearable vitals, buffers offline data, and routes critical events.",
+  "ComponentPublisher": "CloudFusion Healthcare Analytics Ltd",
+  "ComponentDependencies": {
+    "aws.greengrass.Nucleus": {
+      "VersionRequirement": ">=2.9.0",
+      "DependencyType": "HARD"
+    },
+    "aws.greengrass.clientdevices.IPCD": {
+      "VersionRequirement": ">=2.0.0",
+      "DependencyType": "HARD"
+    }
+  },
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux"
+      },
+      "Lifecycle": {
+        "Install": {
+          "Script": "python3 -m pip install --user awsiotsdk sqlite3"
+        },
+        "Run": {
+          "Script": "python3 -u {artifacts:path}/greengrass_edge_telemetry.py"
+        }
+      },
+      "Artifacts": [
+        {
+          "URI": "s3://cha-healthcare-prod-greengrass-artifacts/components/greengrass_edge_telemetry.py"
+        }
+      ]
+    }
+  ]
+}

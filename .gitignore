@@ -1,1 +1,7 @@
 /Rubic
+*.db
+.terraform/
+*.tfstate
+*.tfstate.*
+__pycache__/
+*.pyc

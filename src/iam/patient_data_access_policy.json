@@ -1,0 +1,72 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "EnforceTLSAndMFA",
+      "Effect": "Deny",
+      "Action": "*",
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
+        }
+      }
+    },
+    {
+      "Sid": "DenyWithoutMFAForSensitiveEHR",
+      "Effect": "Deny",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:BatchGetItem",
+        "dynamodb:Query",
+        "s3:GetObject"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:ap-southeast-1:*:table/cha-healthcare-prod-patient-telemetry",
+        "arn:aws:s3:::cha-healthcare-prod-medical-lake/records/*"
+      ],
+      "Condition": {
+        "BoolIfExists": {
+          "aws:MultiFactorAuthPresent": "false"
+        }
+      }
+    },
+    {
+      "Sid": "AllowClinicianABACAccessToMedicalRecords",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:GetObjectVersion",
+        "dynamodb:GetItem",
+        "dynamodb:Query"
+      ],
+      "Resource": [
+        "arn:aws:s3:::cha-healthcare-prod-medical-lake/records/*",
+        "arn:aws:dynamodb:ap-southeast-1:*:table/cha-healthcare-prod-patient-telemetry"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:PrincipalTag/Role": "Clinician",
+          "aws:PrincipalTag/Department": "${aws:ResourceTag/Department}"
+        }
+      }
+    },
+    {
+      "Sid": "AllowScopedKMSDecryptionWithContext",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey"
+      ],
+      "Resource": "arn:aws:kms:ap-southeast-1:*:key/*",
+      "Condition": {
+        "StringEquals": {
+          "kms:ViaService": [
+            "s3.ap-southeast-1.amazonaws.com",
+            "dynamodb.ap-southeast-1.amazonaws.com"
+          ]
+        }
+      }
+    }
+  ]
+}

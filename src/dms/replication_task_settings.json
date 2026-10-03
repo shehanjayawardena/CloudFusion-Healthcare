@@ -1,0 +1,76 @@
+{
+  "TargetMetadata": {
+    "TargetSchema": "",
+    "SupportLobs": true,
+    "FullLobMode": false,
+    "LobChunkSize": 64,
+    "LimitedSizeLobMode": true,
+    "LobMaxSize": 512,
+    "InlineLobMaxSize": 0,
+    "LoadMaxFileSize": 0,
+    "ParallelLoadThreads": 8,
+    "ParallelLoadBufferSize": 100,
+    "BatchApplyEnabled": true,
+    "TaskRecoveryTableEnabled": true
+  },
+  "FullLoadSettings": {
+    "TargetTablePrepMode": "DO_NOTHING",
+    "CreatePkAfterFullLoad": false,
+    "StopTaskCachedChangesApplied": false,
+    "StopTaskCachedChangesNotApplied": false,
+    "MaxFullLoadSubTasks": 8,
+    "TransactionConsistencyTimeout": 600,
+    "CommitRate": 10000
+  },
+  "Logging": {
+    "EnableLogging": true,
+    "LogComponents": [
+      { "Id": "SOURCE_UNLOAD", "Severity": "LOGGER_SEVERITY_DEFAULT" },
+      { "Id": "SOURCE_CAPTURE", "Severity": "LOGGER_SEVERITY_DEFAULT" },
+      { "Id": "TARGET_LOAD", "Severity": "LOGGER_SEVERITY_DEFAULT" },
+      { "Id": "TARGET_APPLY", "Severity": "LOGGER_SEVERITY_DEFAULT" },
+      { "Id": "VALIDATOR_EXT", "Severity": "LOGGER_SEVERITY_INFO" }
+    ]
+  },
+  "ControlTablesSettings": {
+    "ControlSchema": "dms_control",
+    "HistoryTimeslotInMinutes": 5,
+    "HistoryTableEnabled": true,
+    "SuspendedTablesTableEnabled": true,
+    "StatusTableEnabled": true
+  },
+  "ErrorBehavior": {
+    "DataErrorPolicy": "LOG_ERROR",
+    "DataTruncationErrorPolicy": "LOG_ERROR",
+    "DataErrorEscalationPolicy": "SUSPEND_TABLE",
+    "DataErrorEscalationCount": 50,
+    "TableErrorPolicy": "SUSPEND_TABLE",
+    "TableErrorEscalationPolicy": "STOP_TASK",
+    "TableErrorEscalationCount": 5,
+    "ApplyErrorDeletePolicy": "IGNORE_RECORD",
+    "ApplyErrorInsertPolicy": "LOG_ERROR",
+    "ApplyErrorUpdatePolicy": "LOG_ERROR",
+    "ApplyErrorEscalationPolicy": "SUSPEND_TABLE",
+    "ApplyErrorEscalationCount": 20
+  },
+  "ValidationSettings": {
+    "EnableValidation": true,
+    "ValidationMode": "ROW_LEVEL",
+    "ThreadCount": 8,
+    "PartitionSize": 10000,
+    "FailureMaxCount": 100,
+    "RecordFailureDelayInMinutes": 5,
+    "RecordSuspendDelayInMinutes": 30,
+    "MaxKeyColumnSize": 1024,
+    "TableFailureMaxCount": 100,
+    "ValidationOnly": false,
+    "HandleCollationDiff": true,
+    "RecordFailureDelayLimitInMinutes": 0,
+    "SkipLobColumns": false,
+    "ValidationPartialLobMatched": true
+  },
+  "ChangeDataCaptureSettings": {
+    "MinTransactionSize": 1000,
+    "CommitTimeout": 1
+  }
+}

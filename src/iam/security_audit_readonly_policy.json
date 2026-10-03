@@ -1,0 +1,38 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowReadAuditLogsAndGovernance",
+      "Effect": "Allow",
+      "Action": [
+        "cloudtrail:DescribeTrails",
+        "cloudtrail:GetTrailStatus",
+        "cloudtrail:LookupEvents",
+        "config:DeliverConfigSnapshot",
+        "config:Describe*",
+        "config:Get*",
+        "securityhub:Describe*",
+        "securityhub:Get*",
+        "securityhub:List*",
+        "guardduty:Get*",
+        "guardduty:List*",
+        "cloudwatch:Describe*",
+        "cloudwatch:Get*",
+        "cloudwatch:List*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ExplicitDenyPatientDataToAuditors",
+      "Effect": "Deny",
+      "Action": [
+        "s3:GetObject",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:Query",
+        "rds-data:ExecuteStatement"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
