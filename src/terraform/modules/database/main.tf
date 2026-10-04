@@ -8,49 +8,29 @@ resource "aws_db_subnet_group" "aurora" {
   }
 }
 
-# Amazon Aurora PostgreSQL Serverless v2 Cluster
-resource "aws_rds_cluster" "aurora" {
-  cluster_identifier        = "${var.project_name}-${var.environment}-aurora"
-  engine                    = "aurora-postgresql"
-  engine_mode               = "provisioned"
-  engine_version            = "15.4"
-  database_name             = "chaclinical"
-  master_username           = var.master_username
+# Clinical PostgreSQL Database (Free-Tier Eligible db.t4g.micro / Multi-AZ Subnet Group)
+resource "aws_db_instance" "aurora" {
+  identifier                  = "${var.project_name}-${var.environment}-db"
+  allocated_storage           = 20
+  engine                      = "postgres"
+  engine_version              = "15.4"
+  instance_class              = "db.t4g.micro"
+  db_name                     = "chaclinical"
+  username                    = var.master_username
   manage_master_user_password = true
   master_user_secret_kms_key_id = var.kms_key_arn
 
-  storage_encrypted         = true
-  kms_key_id                = var.kms_key_arn
-  backup_retention_period   = 1
-  preferred_backup_window   = "02:00-03:00"
-  copy_tags_to_snapshot     = true
-  deletion_protection       = false # Set true for strict production
+  storage_encrypted           = true
+  kms_key_id                  = var.kms_key_arn
+  backup_retention_period     = 1
+  skip_final_snapshot         = true
+  deletion_protection         = false
 
-  db_subnet_group_name   = aws_db_subnet_group.aurora.name
-  vpc_security_group_ids = [var.database_security_group]
-
-  serverlessv2_scaling_configuration {
-    min_capacity = var.aurora_min_capacity
-    max_capacity = var.aurora_max_capacity
-  }
+  db_subnet_group_name        = aws_db_subnet_group.aurora.name
+  vpc_security_group_ids      = [var.database_security_group]
 
   tags = {
-    Name = "${var.project_name}-${var.environment}-aurora-cluster"
-  }
-}
-
-# Multi-AZ Aurora Instances (Writer in AZ-a, Reader in AZ-b)
-resource "aws_rds_cluster_instance" "aurora_instances" {
-  count              = 2
-  identifier         = "${var.project_name}-${var.environment}-instance-${count.index + 1}"
-  cluster_identifier = aws_rds_cluster.aurora.id
-  instance_class     = "db.serverless"
-  engine             = aws_rds_cluster.aurora.engine
-  engine_version     = aws_rds_cluster.aurora.engine_version
-  db_subnet_group_name = aws_db_subnet_group.aurora.name
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-aurora-node-${count.index + 1}"
+    Name = "${var.project_name}-${var.environment}-clinical-db"
   }
 }
 

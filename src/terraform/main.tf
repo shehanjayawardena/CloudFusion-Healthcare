@@ -49,3 +49,10 @@ module "database" {
   aurora_max_capacity     = var.aurora_max_capacity
   master_username         = var.database_master_username
 }
+
+module "frontend_s3" {
+  source = "./modules/frontend_s3"
+
+  project_name = var.project_name
+  environment  = var.environment
+}

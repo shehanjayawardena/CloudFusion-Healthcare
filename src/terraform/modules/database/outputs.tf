@@ -1,16 +1,16 @@
 output "aurora_cluster_endpoint" {
-  description = "Writer endpoint for the Aurora PostgreSQL cluster"
-  value       = aws_rds_cluster.aurora.endpoint
+  description = "Writer endpoint for the clinical PostgreSQL database"
+  value       = aws_db_instance.aurora.endpoint
 }
 
 output "aurora_cluster_reader_endpoint" {
-  description = "Reader endpoint for the Aurora PostgreSQL cluster"
-  value       = aws_rds_cluster.aurora.reader_endpoint
+  description = "Reader endpoint for the clinical PostgreSQL database"
+  value       = aws_db_instance.aurora.endpoint
 }
 
 output "aurora_cluster_id" {
-  description = "ID of the Aurora cluster"
-  value       = aws_rds_cluster.aurora.id
+  description = "ID of the database instance"
+  value       = aws_db_instance.aurora.id
 }
 
 output "dynamodb_table_name" {

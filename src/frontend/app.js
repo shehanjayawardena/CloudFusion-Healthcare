@@ -180,7 +180,7 @@ function renderPatientList() {
       <div class="patient-id">${p.id} &bull; ${p.gender}, ${p.age}y</div>
       <div class="patient-card-meta" style="margin-top: 8px;">
         <span>${p.ward}</span>
-        <strong style="color: var(--accent-cyan);">${p.baselineHR} BPM</strong>
+        <strong style="color: #0284c7;">${p.baselineHR} BPM</strong>
       </div>
     </div>
   `).join('');
@@ -310,14 +310,14 @@ function drawEcgLoop() {
   ecgPoints[ecgX] = newY;
   ecgX = (ecgX + 1) % w;
 
-  // Clear Background
-  ecgCtx.fillStyle = "#04070e";
+  // Clear Background (Clean Medical Slate White)
+  ecgCtx.fillStyle = "#ffffff";
   ecgCtx.fillRect(0, 0, w, h);
 
-  // Draw Grid Lines (Medical Calipers)
-  ecgCtx.strokeStyle = "rgba(0, 240, 255, 0.04)";
+  // Draw Grid Lines (Calibrated Medical Calipers)
+  ecgCtx.strokeStyle = "#f1f5f9";
   ecgCtx.lineWidth = 1;
-  const gridSize = 25;
+  const gridSize = 20;
   for (let x = 0; x < w; x += gridSize) {
     ecgCtx.beginPath();
     ecgCtx.moveTo(x, 0);
@@ -331,17 +331,16 @@ function drawEcgLoop() {
     ecgCtx.stroke();
   }
 
-  // Draw Neon ECG Waveform
+  // Draw Clinical Lead II Waveform (Deep Medical Blue / High Contrast)
   ecgCtx.beginPath();
   ecgCtx.lineWidth = 2;
-  ecgCtx.strokeStyle = "#00f0ff";
-  ecgCtx.shadowColor = "rgba(0, 240, 255, 0.8)";
-  ecgCtx.shadowBlur = 8;
+  ecgCtx.strokeStyle = "#0284c7";
+  ecgCtx.shadowBlur = 0;
 
   let started = false;
   for (let i = 0; i < w; i++) {
     // Create lead sweep gap effect (sweep eraser cursor)
-    if (Math.abs(i - ecgX) < 16) {
+    if (Math.abs(i - ecgX) < 14) {
       continue;
     }
     const val = ecgPoints[i] || midY;
@@ -353,10 +352,9 @@ function drawEcgLoop() {
     }
   }
   ecgCtx.stroke();
-  ecgCtx.shadowBlur = 0; // reset
 
-  // Glowing sweep head cursor
-  ecgCtx.fillStyle = "#ffffff";
+  // Sweep head cursor
+  ecgCtx.fillStyle = "#0284c7";
   ecgCtx.beginPath();
   ecgCtx.arc(ecgX, newY, 3, 0, Math.PI * 2);
   ecgCtx.fill();

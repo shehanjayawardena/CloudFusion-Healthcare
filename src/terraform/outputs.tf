@@ -52,3 +52,8 @@ output "kms_healthcare_key_arn" {
   description = "ARN of the Customer Managed KMS Key for healthcare encryption"
   value       = module.security.kms_healthcare_key_arn
 }
+
+output "frontend_website_url" {
+  description = "Live Public AWS URL for the CloudFusion HealthPulse Frontend on Amazon S3"
+  value       = module.frontend_s3.website_url
+}
