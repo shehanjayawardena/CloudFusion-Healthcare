@@ -21,7 +21,7 @@ resource "aws_rds_cluster" "aurora" {
 
   storage_encrypted         = true
   kms_key_id                = var.kms_key_arn
-  backup_retention_period   = 35
+  backup_retention_period   = 1
   preferred_backup_window   = "02:00-03:00"
   copy_tags_to_snapshot     = true
   deletion_protection       = false # Set true for strict production
@@ -90,16 +90,19 @@ resource "aws_dynamodb_table" "patient_telemetry" {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
 # S3 Medical Data Lake and Historical Archive
 resource "aws_s3_bucket" "medical_data_lake" {
-  bucket        = "${var.project_name}-${var.environment}-medical-lake"
-  force_destroy = false
+  bucket        = "${var.project_name}-${var.environment}-lake-${data.aws_caller_identity.current.account_id}"
+  force_destroy = true
 
   tags = {
     Name        = "${var.project_name}-${var.environment}-medical-lake"
     Compliance  = "HIPAA-GDPR"
   }
 }
+
 
 # Enable Object Versioning (Immutable Medical Records)
 resource "aws_s3_bucket_versioning" "lake_versioning" {

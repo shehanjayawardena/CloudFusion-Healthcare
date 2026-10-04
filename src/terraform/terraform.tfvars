@@ -1,0 +1,16 @@
+aws_region          = "ap-southeast-1"
+environment         = "prod"
+project_name        = "cha-healthcare"
+vpc_cidr            = "10.50.0.0/16"
+
+availability_zones       = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+public_subnet_cidrs      = ["10.50.1.0/24", "10.50.2.0/24", "10.50.3.0/24"]
+private_app_subnet_cidrs = ["10.50.10.0/24", "10.50.20.0/24", "10.50.30.0/24"]
+private_db_subnet_cidrs  = ["10.50.100.0/24", "10.50.110.0/24", "10.50.120.0/24"]
+
+aurora_min_capacity      = 0.5
+aurora_max_capacity      = 4.0
+database_master_username = "cha_db_admin"
+
+ecs_min_capacity         = 6
+ecs_max_capacity         = 60

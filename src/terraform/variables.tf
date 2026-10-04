@@ -55,7 +55,7 @@ variable "aurora_min_capacity" {
 variable "aurora_max_capacity" {
   description = "Maximum ACU (Aurora Capacity Units) for Aurora Serverless v2"
   type        = number
-  default     = 16.0
+  default     = 4.0
 }
 
 variable "database_master_username" {

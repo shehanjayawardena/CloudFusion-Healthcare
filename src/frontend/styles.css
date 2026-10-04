@@ -1,0 +1,1091 @@
+/* ==========================================================================
+   CloudFusion HealthPulse - Enterprise Design System (CSS)
+   Target: Clinical Telemedicine & IoT Patient Monitoring Portal (TPP & PMP)
+   Aesthetic: Dark Modern Glassmorphism, Neon Telemetry, Clinical Elegance
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --bg-primary: #070b14;
+  --bg-secondary: #0d1527;
+  --bg-tertiary: #131f38;
+  --surface-card: rgba(19, 31, 56, 0.7);
+  --surface-hover: rgba(30, 48, 86, 0.8);
+  --surface-glass: rgba(255, 255, 255, 0.04);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(0, 240, 255, 0.3);
+  
+  /* Brand & Clinical Accents */
+  --accent-cyan: #00f0ff;
+  --accent-cyan-dim: rgba(0, 240, 255, 0.15);
+  --accent-blue: #3b82f6;
+  --accent-purple: #8b5cf6;
+  --clinical-green: #10b981;
+  --clinical-green-dim: rgba(16, 185, 129, 0.15);
+  --clinical-amber: #f59e0b;
+  --clinical-amber-dim: rgba(245, 158, 11, 0.15);
+  --clinical-rose: #f43f5e;
+  --clinical-rose-dim: rgba(244, 63, 94, 0.15);
+
+  /* Typography */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  /* Shadows & Glass */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --shadow-cyan-glow: 0 0 25px rgba(0, 240, 255, 0.25);
+  --glass-blur: blur(16px);
+  
+  /* Transitions */
+  --trans-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --trans-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 100vh;
+  background-image: 
+    radial-gradient(at 10% 10%, rgba(0, 240, 255, 0.06) 0px, transparent 50%),
+    radial-gradient(at 90% 90%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.03) 0px, transparent 60%);
+  background-attachment: fixed;
+}
+
+/* Layout Architecture */
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+  width: 260px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 24px;
+}
+
+.brand-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #00f0ff, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+.brand-text h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-text span {
+  font-size: 0.72rem;
+  color: var(--accent-cyan);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-grow: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--trans-fast);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.nav-item:hover {
+  color: var(--text-primary);
+  background: var(--surface-glass);
+}
+
+.nav-item.active {
+  color: var(--accent-cyan);
+  background: var(--accent-cyan-dim);
+  border-color: var(--border-glow);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
+}
+
+.nav-item svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+.aws-status-badge {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--clinical-green);
+  box-shadow: 0 0 8px var(--clinical-green);
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.aws-status-text {
+  font-size: 0.75rem;
+}
+
+.aws-status-text strong {
+  display: block;
+  color: var(--clinical-green);
+}
+
+.aws-status-text span {
+  color: var(--text-muted);
+}
+
+/* Main Content Area */
+.main-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: transparent;
+}
+
+/* Top App Header */
+.top-header {
+  height: 70px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(13, 21, 39, 0.75);
+  backdrop-filter: var(--glass-blur);
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.page-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ward-filter-select {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+  transition: var(--trans-fast);
+}
+
+.ward-filter-select:hover {
+  border-color: var(--border-glow);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.aws-region-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-glass);
+  border: 1px solid var(--border-subtle);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.aws-region-pill span {
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 2px solid var(--border-glow);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-role {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* Page Views */
+.view-section {
+  display: none;
+  padding: 28px 32px;
+  animation: fadeIn 0.3s ease;
+}
+
+.view-section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Grid Systems */
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+}
+
+/* Glass Cards */
+.glass-panel {
+  background: var(--surface-card);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--trans-normal);
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Patient Roster Card */
+.roster-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.roster-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.badge-counter {
+  background: var(--surface-glass);
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+}
+
+.patient-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.patient-card {
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: var(--trans-fast);
+}
+
+.patient-card:hover {
+  background: var(--surface-glass);
+  border-color: rgba(0, 240, 255, 0.2);
+}
+
+.patient-card.selected {
+  background: rgba(0, 240, 255, 0.07);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
+}
+
+.patient-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.patient-name-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.patient-id {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.status-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status-tag.critical {
+  background: var(--clinical-rose-dim);
+  color: var(--clinical-rose);
+  border: 1px solid var(--clinical-rose);
+}
+
+.status-tag.warning {
+  background: var(--clinical-amber-dim);
+  color: var(--clinical-amber);
+  border: 1px solid var(--clinical-amber);
+}
+
+.status-tag.stable {
+  background: var(--clinical-green-dim);
+  color: var(--clinical-green);
+  border: 1px solid var(--clinical-green);
+}
+
+.patient-card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Primary Telemetry Stream */
+.telemetry-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.live-patient-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.08) 0%, rgba(59, 130, 246, 0.04) 100%);
+  border: 1px solid var(--border-glow);
+  border-radius: 12px;
+}
+
+.hero-info h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  display: flex;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00f0ff, #3b82f6);
+  color: #050b14;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--trans-fast);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+}
+
+.btn-secondary {
+  background: var(--surface-glass);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--trans-fast);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Vitals Cards Metric Strip */
+.vitals-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.vital-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.vital-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+.vital-box.heart::before { background: var(--clinical-rose); }
+.vital-box.spo2::before { background: var(--accent-cyan); }
+.vital-box.bp::before { background: var(--clinical-amber); }
+.vital-box.temp::before { background: var(--clinical-green); }
+
+.vital-label {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+}
+
+.vital-value-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.vital-value {
+  font-size: 1.85rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.vital-unit {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.vital-trend {
+  font-size: 0.72rem;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trend-stable { color: var(--clinical-green); }
+.trend-up { color: var(--clinical-rose); }
+.trend-warning { color: var(--clinical-amber); }
+
+/* ECG Canvas Container */
+.ecg-container {
+  background: #04070e;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 12px;
+  padding: 18px 20px;
+  position: relative;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.ecg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ecg-header h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ecg-specs {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+canvas#ecgCanvas {
+  width: 100%;
+  height: 140px;
+  display: block;
+}
+
+/* AI Predictive Analytics Alert Panel */
+.ai-risk-panel {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 24px;
+  border-radius: 12px;
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.ai-icon-shield {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(139, 92, 246, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-purple);
+  flex-shrink: 0;
+}
+
+.ai-risk-content {
+  flex-grow: 1;
+}
+
+.ai-risk-content h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #c084fc;
+}
+
+.ai-risk-content p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.ai-gauge-pill {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.gauge-pct {
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: #c084fc;
+}
+
+.gauge-desc {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Telemedicine Video Consultation Suite View
+   ========================================================================== */
+.telemed-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  height: calc(100vh - 126px);
+}
+
+.video-stage {
+  display: flex;
+  flex-direction: column;
+  background: #050811;
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.video-screen-main {
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #0f1c38 0%, #060a14 100%);
+}
+
+.doctor-mock-feed {
+  text-align: center;
+}
+
+.doctor-avatar-large {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00f0ff, #3b82f6);
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+  border: 4px solid rgba(255, 255, 255, 0.1);
+}
+
+.doctor-avatar-large svg {
+  width: 60px;
+  height: 60px;
+  color: #070b14;
+}
+
+.call-live-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(244, 63, 94, 0.2);
+  border: 1px solid var(--clinical-rose);
+  color: var(--clinical-rose);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.encryption-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid var(--clinical-green);
+  color: var(--clinical-green);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.patient-pip {
+  position: absolute;
+  bottom: 80px;
+  right: 24px;
+  width: 170px;
+  height: 110px;
+  border-radius: 10px;
+  background: #111a2e;
+  border: 2px solid var(--border-glow);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.pip-tag {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  background: rgba(0,0,0,0.6);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.video-controls-bar {
+  height: 70px;
+  background: rgba(13, 21, 39, 0.95);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.ctrl-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface-glass);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--trans-fast);
+}
+
+.ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.ctrl-btn.end-call {
+  background: var(--clinical-rose);
+  border-color: var(--clinical-rose);
+  color: white;
+}
+
+.ctrl-btn.end-call:hover {
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.5);
+}
+
+/* Clinical Sidebar in Telemed */
+.telemed-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.clinical-notes-card {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.clinical-notes-card h3 {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.clinical-textarea {
+  width: 100%;
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  resize: none;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.clinical-textarea:focus {
+  border-color: var(--accent-cyan);
+}
+
+.rx-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   Appointment Booking Portal View
+   ========================================================================== */
+.booking-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.clinician-cards-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.doctor-select-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 18px;
+  cursor: pointer;
+  transition: var(--trans-fast);
+}
+
+.doctor-select-card:hover {
+  background: var(--surface-glass);
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+}
+
+.doctor-select-card.selected {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 240, 255, 0.06);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+}
+
+.doc-card-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.doc-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  border: 2px solid var(--border-subtle);
+}
+
+.doc-info h4 {
+  font-size: 0.95rem;
+}
+
+.doc-info span {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.time-slots-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.slot-pill {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: var(--surface-glass);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: var(--trans-fast);
+}
+
+.slot-pill:hover, .slot-pill.active {
+  background: var(--accent-cyan);
+  color: #070b14;
+  font-weight: 700;
+  border-color: var(--accent-cyan);
+}
+
+/* ==========================================================================
+   AWS Live Cloud Topology & Health Monitor View
+   ========================================================================== */
+.cloud-topo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.cloud-service-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.service-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(0, 240, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+}
+
+.service-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.service-metric-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.service-metric-line span:last-child {
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.toast {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glow);
+  padding: 14px 20px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+  .telemetry-grid {
+    grid-template-columns: 1fr;
+  }
+  .telemed-layout {
+    grid-template-columns: 1fr;
+  }
+  .booking-grid {
+    grid-template-columns: 1fr;
+  }
+  .cloud-topo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+    padding: 16px 8px;
+  }
+  .brand-text, .nav-item span, .aws-status-badge {
+    display: none;
+  }
+  .vitals-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cloud-topo-grid {
+    grid-template-columns: 1fr;
+  }
+}

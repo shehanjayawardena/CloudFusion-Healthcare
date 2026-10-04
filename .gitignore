@@ -5,3 +5,8 @@
 *.tfstate.*
 __pycache__/
 *.pyc
+credentials/
+*.env
+test_connection.py
+deployed_resources_manifest.json
+bin/
