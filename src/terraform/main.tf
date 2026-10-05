@@ -56,3 +56,14 @@ module "frontend_s3" {
   project_name = var.project_name
   environment  = var.environment
 }
+
+module "sagemaker" {
+  source = "./modules/sagemaker"
+
+  project_name               = var.project_name
+  environment                = var.environment
+  data_lake_bucket_name      = "cha-healthcare-prod-lake-460060049985"
+  model_s3_key               = "ml-models/sepsis/model.tar.gz"
+  serverless_memory_size_mb  = 2048
+  serverless_max_concurrency = 20
+}

@@ -11,3 +11,4 @@ test_connection.py
 deployed_resources_manifest.json
 bin/
 /docs
+node_modules/

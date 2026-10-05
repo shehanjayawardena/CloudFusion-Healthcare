@@ -57,3 +57,13 @@ output "frontend_website_url" {
   description = "Live Public AWS URL for the CloudFusion HealthPulse Frontend on Amazon S3"
   value       = module.frontend_s3.website_url
 }
+
+output "sagemaker_endpoint_name" {
+  description = "Name of the deployed Amazon SageMaker Serverless Inference Endpoint"
+  value       = module.sagemaker.sagemaker_endpoint_name
+}
+
+output "sagemaker_model_name" {
+  description = "Name of the Amazon SageMaker Model"
+  value       = module.sagemaker.sagemaker_model_name
+}
